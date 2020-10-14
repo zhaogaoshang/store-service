@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zhaogaoshang.store.mapper.OneCategoryMapper">
+    <resultMap id="BaseResultMap" type="top.zhaogaoshang.store.model.OneCategory">
+        <id column="one_category_index" jdbcType="INTEGER" property="oneCategoryIndex"/>
+        <result column="one_category_id" jdbcType="VARCHAR" property="oneCategoryId"/>
+        <result column="one_category_name" jdbcType="VARCHAR" property="oneCategoryName"/>
+        <result column="store_id" jdbcType="VARCHAR" property="storeId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    one_category_index, one_category_id, one_category_name, store_id
+  </sql>
+
+    <!--根据仓库的id查找-->
+    <select id="selectByPrimaryId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_one_category
+        where store_id = #{storeId}
+        limit ${(page-1)*10},10
+    </select>
+
+    <!--根据仓促id查找一级分类总数-->
+    <select id="selectCountByStoreId" resultType="java.lang.Integer">
+        select
+        count(*)
+        from tb_one_category
+        where store_id = #{storeId}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_one_category
+    where one_category_index = #{oneCategoryIndex}
+  </delete>
+
+    <!--删除-->
+    <delete id="deleteByCategoryId" parameterType="java.lang.String">
+    delete from tb_one_category
+    where one_category_id = #{categoryId,jdbcType=VARCHAR}
+  </delete>
+
+    <insert id="insert" parameterType="top.zhaogaoshang.store.model.OneCategory">
+    insert into tb_one_category (one_category_index, one_category_id, 
+      one_category_name, store_id)
+    values (#{oneCategoryIndex,jdbcType=INTEGER}, #{oneCategoryId,jdbcType=VARCHAR}, 
+      #{oneCategoryName,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR})
+  </insert>
+    <!--添加分類-->
+    <insert id="insertSelective" parameterType="top.zhaogaoshang.store.model.OneCategory">
+        insert into tb_one_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oneCategoryIndex != null">
+                one_category_index,
+            </if>
+            <if test="oneCategoryId != null">
+                one_category_id,
+            </if>
+            <if test="oneCategoryName != null">
+                one_category_name,
+            </if>
+            <if test="storeId != null">
+                store_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oneCategoryIndex != null">
+                #{oneCategoryIndex,jdbcType=INTEGER},
+            </if>
+            <if test="oneCategoryId != null">
+                #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryName != null">
+                #{oneCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="top.zhaogaoshang.store.model.OneCategory">
+        update tb_one_category
+        <set>
+            <if test="oneCategoryId != null">
+                one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryName != null">
+                one_category_name = #{oneCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where one_category_id = #{oneCategoryId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.zhaogaoshang.store.model.OneCategory">
+    update tb_one_category
+    set one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+      one_category_name = #{oneCategoryName,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=VARCHAR}
+    where one_category_index = #{oneCategoryIndex,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zhaogaoshang.store.mapper.TwoCategoryMapper">
+    <resultMap id="BaseResultMap" type="top.zhaogaoshang.store.model.TwoCategory">
+        <id column="two_category_index" jdbcType="INTEGER" property="twoCategoryIndex"/>
+        <result column="two_category_id" jdbcType="VARCHAR" property="twoCategoryId"/>
+        <result column="two_category_name" jdbcType="VARCHAR" property="twoCategoryName"/>
+        <result column="one_category_id" jdbcType="VARCHAR" property="oneCategoryId"/>
+        <result column="store_id" jdbcType="VARCHAR" property="storeId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    two_category_index, two_category_id, two_category_name, one_category_id, store_id
+  </sql>
+
+    <!--根据二级分类id查询-->
+    <select id="selectByOneCategoryId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_two_category
+        where one_category_id = #{oneCategoryId}
+    </select>
+
+    <!--根据仓库查找二级分类-->
+    <select id="selectByStoreId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from tb_two_category
+        where store_id = #{storeId}
+    </select>
+
+    <!--根据分类的id删除-->
+    <delete id="deleteByPrimaryId">
+    delete from tb_two_category
+    where two_category_id = #{twoCategoryId}
+  </delete>
+
+    <insert id="insert" parameterType="top.zhaogaoshang.store.model.TwoCategory">
+    insert into tb_two_category (two_category_index, two_category_id, 
+      two_category_name, one_category_id, store_id
+      )
+    values (#{twoCategoryIndex,jdbcType=INTEGER}, #{twoCategoryId,jdbcType=VARCHAR}, 
+      #{twoCategoryName,jdbcType=VARCHAR}, #{oneCategoryId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <!--添加-->
+    <insert id="insertSelective" parameterType="top.zhaogaoshang.store.model.TwoCategory">
+        insert into tb_two_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="twoCategoryIndex != null">
+                two_category_index,
+            </if>
+            <if test="twoCategoryId != null">
+                two_category_id,
+            </if>
+            <if test="twoCategoryName != null">
+                two_category_name,
+            </if>
+            <if test="oneCategoryId != null">
+                one_category_id,
+            </if>
+            <if test="storeId != null">
+                store_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="twoCategoryIndex != null">
+                #{twoCategoryIndex,jdbcType=INTEGER},
+            </if>
+            <if test="twoCategoryId != null">
+                #{twoCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="twoCategoryName != null">
+                #{twoCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryId != null">
+                #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更改二级分类-->
+    <update id="updateByPrimaryIdSelective" parameterType="top.zhaogaoshang.store.model.TwoCategory">
+        update tb_two_category
+        <set>
+            <if test="twoCategoryId != null">
+                two_category_id = #{twoCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="twoCategoryName != null">
+                two_category_name = #{twoCategoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryId != null">
+                one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where two_category_id = #{twoCategoryId}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.zhaogaoshang.store.model.TwoCategory">
+    update tb_two_category
+    set two_category_id = #{twoCategoryId,jdbcType=VARCHAR},
+      two_category_name = #{twoCategoryName,jdbcType=VARCHAR},
+      one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=VARCHAR}
+    where two_category_index = #{twoCategoryIndex,jdbcType=INTEGER}
+  </update>
+</mapper>
