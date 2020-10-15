@@ -11,19 +11,19 @@ import org.springframework.stereotype.Service;
 @Component
 public class Result {
     Integer code; // 1为成功 2为失败
-    String massage;
+    String message;
     Object data;
 
     // 成功
     public void success(Object data){
         this.data = data;
         this.code = 1;
-        this.massage = "成功";
+        this.message = "成功";
     }
 
-    public void error(String massage){
+    public void error(String message){
         this.code = 2;
-        this.massage = massage;
+        this.message = message;
         this.data = null;
     }
 
@@ -36,12 +36,12 @@ public class Result {
         return this;
     }
 
-    public String getMassage() {
-        return massage;
+    public String getMessage() {
+        return message;
     }
 
-    public Result setMassage(String massage) {
-        this.massage = massage;
+    public Result setMessage(String message) {
+        this.message = message;
         return this;
     }
 

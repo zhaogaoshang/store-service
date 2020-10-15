@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zhaogaoshang.store.mapper.ProductMapper">
+    <resultMap id="BaseResultMap" type="top.zhaogaoshang.store.model.Product">
+        <id column="product_index" jdbcType="INTEGER" property="productIndex"/>
+        <result column="product_id" jdbcType="VARCHAR" property="productId"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="product_count" jdbcType="INTEGER" property="productCount"/>
+        <result column="product_status" jdbcType="INTEGER" property="productStatus"/>
+        <result column="two_category_id" jdbcType="VARCHAR" property="twoCategoryId"/>
+        <result column="one_category_id" jdbcType="VARCHAR" property="oneCategoryId"/>
+        <result column="store_id" jdbcType="VARCHAR" property="storeId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    product_index, product_id, product_name, product_count, product_status, two_category_id, 
+    one_category_id, store_id
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_product
+        where product_index = #{productIndex,jdbcType=INTEGER}
+    </select>
+
+    <!--根据分类获取id查询产品-->
+    <select id="selectByCategory" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"></include>
+        from tb_product
+        where two_category_id = #{twoCategoryId}
+        limit ${(page-1)*10},10
+    </select>
+
+    <!--根据分类id查找商品总数-->
+    <select id="selectAllByCategory" resultType="java.lang.Integer">
+    select
+    count(*)
+    from tb_product
+    where two_category_id = #{twoCategoryId}
+</select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_product
+    where product_index = #{productIndex,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="top.zhaogaoshang.store.model.Product">
+    insert into tb_product (product_index, product_id, product_name, 
+      product_count, product_status, two_category_id, 
+      one_category_id, store_id)
+    values (#{productIndex,jdbcType=INTEGER}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{productCount,jdbcType=INTEGER}, #{productStatus,jdbcType=INTEGER}, #{twoCategoryId,jdbcType=VARCHAR}, 
+      #{oneCategoryId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="top.zhaogaoshang.store.model.Product">
+        insert into tb_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productIndex != null">
+                product_index,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="productName != null">
+                product_name,
+            </if>
+            <if test="productCount != null">
+                product_count,
+            </if>
+            <if test="productStatus != null">
+                product_status,
+            </if>
+            <if test="twoCategoryId != null">
+                two_category_id,
+            </if>
+            <if test="oneCategoryId != null">
+                one_category_id,
+            </if>
+            <if test="storeId != null">
+                store_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productIndex != null">
+                #{productIndex,jdbcType=INTEGER},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCount != null">
+                #{productCount,jdbcType=INTEGER},
+            </if>
+            <if test="productStatus != null">
+                #{productStatus,jdbcType=INTEGER},
+            </if>
+            <if test="twoCategoryId != null">
+                #{twoCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryId != null">
+                #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.zhaogaoshang.store.model.Product">
+        update tb_product
+        <set>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCount != null">
+                product_count = #{productCount,jdbcType=INTEGER},
+            </if>
+            <if test="productStatus != null">
+                product_status = #{productStatus,jdbcType=INTEGER},
+            </if>
+            <if test="twoCategoryId != null">
+                two_category_id = #{twoCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="oneCategoryId != null">
+                one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where product_index = #{productIndex,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.zhaogaoshang.store.model.Product">
+    update tb_product
+    set product_id = #{productId,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_count = #{productCount,jdbcType=INTEGER},
+      product_status = #{productStatus,jdbcType=INTEGER},
+      two_category_id = #{twoCategoryId,jdbcType=VARCHAR},
+      one_category_id = #{oneCategoryId,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=VARCHAR}
+    where product_index = #{productIndex,jdbcType=INTEGER}
+  </update>
+</mapper>
